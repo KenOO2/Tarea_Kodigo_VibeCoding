@@ -133,7 +133,8 @@ Para desplegar en Vercel:
 1. Instale la CLI de Vercel (si aún no la tiene): `npm i -g vercel`
 2. Desde la raíz del proyecto ejecute: `vercel`
 3. Siga los asistentes para vincular el repositorio y configurar las variables de entorno (MEALDB_BASE_URL).
-4. Una vez desplegado, acceda a la URL provista (ejemplo: https://recetarioia.vercel.app)
+4. Una vez desplegado, acceda a la URL provista 
+- Link Vercel: https://tarea-kodigo-vibe-coding.vercel.app/
 
 > **Nota:** El enlace anterior es un placeholder; reemplácelo con la URL real obtenida tras el despliegue.
 
