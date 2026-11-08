@@ -35,7 +35,7 @@ export async function getRecipeById(id: string): Promise<Recipe | null> {
       throw new Error(`Failed to fetch recipe: ${response.statusText}`);
     }
     const data = await response.json();
-    if !data.meals || data.meals.length === 0) {
+    if (!data.meals || data.meals.length === 0) {
       return null;
     }
     const meal = data.meals[0];
