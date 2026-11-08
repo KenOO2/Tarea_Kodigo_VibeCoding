@@ -18,7 +18,7 @@ export default function RootLayout({
     <html lang='es'>
       <body className='bg-gray-50 min-h-screen'>
         <Navbar />
-        <main className='flex-min-none'>{children}</main>
+        <main>{children}</main>
         <Footer />
       </body>
     </html>

@@ -1,54 +1,68 @@
 // hooks/useFavorites.ts
-import { useState, useEffect, useCallback } from 'react';
+'use client';
+
+import { useCallback, useSyncExternalStore } from 'react';
 
 const FAVORITES_STORAGE_KEY = 'recetarioia-favorites';
+const EMPTY: string[] = [];
+
+// Store compartido: todos los componentes que usan el hook leen la misma fuente
+// (localStorage), por lo que el estado se mantiene al recargar o cambiar de página.
+const listeners = new Set<() => void>();
+let cachedRaw: string | null = null;
+let cachedValue: string[] = EMPTY;
+
+function readFavorites(): string[] {
+  try {
+    const raw = window.localStorage.getItem(FAVORITES_STORAGE_KEY);
+    // useSyncExternalStore exige devolver la MISMA referencia si nada cambió.
+    if (raw === cachedRaw) return cachedValue;
+    cachedRaw = raw;
+    const parsed: unknown = raw ? JSON.parse(raw) : [];
+    cachedValue = Array.isArray(parsed)
+      ? parsed.filter((v): v is string => typeof v === 'string')
+      : EMPTY;
+  } catch {
+    cachedValue = EMPTY;
+  }
+  return cachedValue;
+}
+
+function writeFavorites(next: string[]) {
+  try {
+    window.localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(next));
+  } catch (error) {
+    console.error('No se pudieron guardar los favoritos:', error);
+  }
+  listeners.forEach((listener) => listener());
+}
+
+function subscribe(listener: () => void) {
+  listeners.add(listener);
+  // Sincroniza entre pestañas del navegador
+  const onStorage = (e: StorageEvent) => {
+    if (e.key === FAVORITES_STORAGE_KEY || e.key === null) listener();
+  };
+  window.addEventListener('storage', onStorage);
+  return () => {
+    listeners.delete(listener);
+    window.removeEventListener('storage', onStorage);
+  };
+}
+
+const getServerSnapshot = () => EMPTY;
 
 export function useFavorites() {
-  const [favorites, setFavorites] = useState<string[]>([]);
+  const favorites = useSyncExternalStore(subscribe, readFavorites, getServerSnapshot);
 
-  // Load favorites from localStorage on client side
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const stored = window.localStorage.getItem(FAVORITES_STORAGE_KEY);
-        if (stored) {
-          const parsed = JSON.parse(stored);
-          if (Array.isArray(parsed)) {
-            setFavorites(parsed);
-          }
-        }
-      } catch (error) {
-        console.error('Failed to load favorites from localStorage:', error);
-      }
-    }
-  }, []);
-
-  // Save favorites to localStorage whenever they change
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        window.localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favorites));
-      } catch (error) {
-        console.error('Failed to save favorites to localStorage:', error);
-      }
-    }
-  }, [favorites]);
-
-  // Toggle a favorite recipe ID
   const toggleFavorite = useCallback((id: string) => {
-    setFavorites(prev => {
-      if (prev.includes(id)) {
-        return prev.filter(favId => favId !== id);
-      } else {
-        return [...prev, id];
-      }
-    });
+    const current = readFavorites();
+    writeFavorites(
+      current.includes(id) ? current.filter((favId) => favId !== id) : [...current, id]
+    );
   }, []);
 
-  // Check if a recipe ID is in favorites
-  const isFavorite = useCallback((id: string) => {
-    return favorites.includes(id);
-  }, [favorites]);
+  const isFavorite = useCallback((id: string) => favorites.includes(id), [favorites]);
 
   return { favorites, toggleFavorite, isFavorite };
 }

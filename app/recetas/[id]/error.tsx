@@ -4,7 +4,6 @@
 import { useRouter } from 'next/navigation';
 
 export default function RecipeDetailError({
-  error,
   reset,
 }: {
   error: Error & { digest?: string };

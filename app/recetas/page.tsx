@@ -2,6 +2,7 @@
 import { searchRecipes } from '@/lib/mealdb';
 import SearchBar from '@/components/SearchBar';
 import RecipeCard from '@/components/RecipeCard';
+import type { Recipe } from '@/types/recipe';
 
 export default async function RecetasPage({
   searchParams,
@@ -11,7 +12,7 @@ export default async function RecetasPage({
   const params = await searchParams;
   const query = params.q ?? '';
 
-  let recipes: any[] = [];
+  let recipes: Recipe[] = [];
   if (query) {
     recipes = await searchRecipes(query);
   }
@@ -25,7 +26,7 @@ export default async function RecetasPage({
         <SearchBar defaultValue={query} />
         {query && recipes.length === 0 ? (
           <p className='text-gray-500 col-span-full'>
-            No se encontraron recetas para "{query}"
+            No se encontraron recetas para &quot;{query}&quot;
           </p>
         ) : (
           <div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-6'>

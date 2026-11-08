@@ -1,4 +1,6 @@
 // app/page.tsx
+import Link from 'next/link';
+
 export default function Home() {
   return (
     <>
@@ -18,12 +20,12 @@ export default function Home() {
               crea tu propio recetario personal.
             </p>
             <div className='mt-8'>
-              <a
+              <Link
                 href='/recetas'
                 className='inline-flex items-center px-6 py-3 border border-transparent text-sm font-medium rounded-md shadow-sm bg-orange-600 text-white hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500'
               >
                 Explorar recetas
-              </a>
+              </Link>
             </div>
           </div>
         </div>
