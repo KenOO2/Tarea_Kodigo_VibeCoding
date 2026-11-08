@@ -4,16 +4,16 @@ Aplicación web para buscar recetas y guardar favoritas utilizando la API públi
 
 ## Capturas (placeholders)
 
-![Página de inicio](/public/screenshots/image1.png)
+![Página de inicio](image1.png)
 *Página de inicio con hero y descripción.*
 
-![Lista de recetas](/public/screenshots/iamge2.png)
+![Lista de recetas](iamge2.png)
 *Lista de recetas con barra de búsqueda y tarjetas responsivas.*
 
-![Detalle de receta](/public/screenshots/image3.png)
+![Detalle de receta](image3.png)
 *Vista detallada de una receta con ingredientes e instrucciones.*
 
-![Página de favoritos](/public/screenshots/favoritos.png)
+![Página de favoritos](image4.png)
 *Página de favoritos con las recetas guardadas.*
 
 ## Stack

@@ -1,7 +1,5 @@
 # Plantilla VIBE_CODING.md
 
-Esta plantilla está diseñada para documentar el proceso de desarrollo siguiendo la metodología de Vibe Coding utilizada en el proyecto RecetarioIA. Cada sección debe llenarse conforme avanza el trabajo.
-
 ---
 
 ## Prompts principales
@@ -63,9 +61,6 @@ Descripción de problemas encontrados durante el desarrollo y cómo se resolvier
 | **Pruebas de accesibilidad fallaban por contraste insuficiente** | Se ajustaron las clases de color de los enlaces y botones a tonos que cumplen con relación de contraste AA (≥4.5:1) según la paleta de Tailwind (ej. `text-gray-800` ↔ `hover:text-orange-600`). |
 | **Despliegue en Vercel falló por dominio de imágenes no permitido** | Se actualizó `next.config.ts` usando `images.remotePatterns` en lugar del obsoleto `domains`, especificando `protocol: 'https'` y `hostname: 'www.themealdb.com'`. |
 
---- 
-
-*Esta plantilla puede copiarse y rellenarse a medida que avance el proyecto; sirve como registro histórico del proceso Vibe Coding y facilita la revisión y el onboarding de nuevos integrantes del equipo.*
 ---
 
 ## Corrección: favoritos no persistían (revisión posterior)
@@ -75,3 +70,5 @@ Descripción de problemas encontrados durante el desarrollo y cómo se resolvier
 | **Al recargar o cambiar de página se perdían los favoritos** | Causa: en `useFavorites` el efecto que *guarda* en localStorage se ejecutaba en el primer render, cuando el estado aún era `[]`, y sobrescribía los datos guardados antes de que el efecto que *lee* los aplicara. Además cada componente tenía su propio estado aislado. Solución: reescribir el hook con `useSyncExternalStore` usando localStorage como única fuente de verdad (compartida entre componentes y pestañas). |
 | **`/api/recetas/[id]` fallaba (build roto y favoritos sin cargar)** | En Next 16 `params` es una Promesa; se cambió a `await params`. |
 | **Errores de lint (`any`, `<a>` internos, setState en efecto)** | Se tipó la respuesta de TheMealDB, se usó `next/link`, y el Footer pasó a ser un Server Component sin estado. |
+
+---
